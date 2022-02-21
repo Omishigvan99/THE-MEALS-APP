@@ -1,31 +1,47 @@
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import React from "react";
+import { MEALS } from "../data/dummy-data";
+import MealCard from "../components/MealCard";
 
 const CategoryScreen = (props) => {
-    let title = props.navigation.getParam("categoryTitle");
+    // let title = props.navigation.getParam("categoryTitle");
+    let id = props.route.params.categoryId;
+
+    let mealsDisplayList = MEALS.filter((item) => {
+        return item.categoriesId.indexOf(id) >= 0;
+    });
+
     return (
         <View style={styles.screen}>
-            <Text>CategoryScreen</Text>
-            <Text>{title}</Text>
-            <Button
-                title={"Go to Meal Details"}
-                onPress={() => {
-                    props.navigation.navigate("MealDetails");
+            <FlatList
+                style={{ width: "100%", padding: 10 }}
+                data={mealsDisplayList}
+                renderItem={(itemData) => {
+                    return (
+                        <MealCard
+                            title={itemData.item.title}
+                            duration={itemData.item.duration}
+                            affordability={itemData.item.affordability}
+                            complexity={itemData.item.complexity}
+                            imageUrl={itemData.item.imageUrl}
+                            onPress={() => {
+                                props.navigation.navigate({
+                                    name: "Meal Details",
+                                    params: {
+                                        mealId: itemData.item.id,
+                                        mealTitle: itemData.item.title,
+                                    },
+                                });
+                            }}
+                        ></MealCard>
+                    );
                 }}
-            ></Button>
+            ></FlatList>
         </View>
     );
 };
 
 export default CategoryScreen;
-
-CategoryScreen.navigationOptions = (navigationData) => {
-    let title = navigationData.navigation.getParam("categoryTitle");
-
-    return {
-        headerTitle: title,
-    };
-};
 
 const styles = StyleSheet.create({
     screen: {

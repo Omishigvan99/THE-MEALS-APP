@@ -9,35 +9,20 @@ import {
 } from "react-native";
 import React from "react";
 import { CATEGORIES } from "../data/dummy-data";
-import { colors } from "../constants/colors";
+import CategoryCard from "../components/CategoryCard";
 
 const MealCategoriesScreen = (props) => {
     let renderCategoryGridItem = (itemData) => {
         return (
-            <TouchableOpacity
-                style={styles.categoryCard}
-                activeOpacity={0.4}
-                onPress={() => {
-                    props.navigation.navigate({
-                        routeName: "Category",
-                        params: {
-                            categoryId: itemData.item.id,
-                            categoryTitle: itemData.item.title,
-                        },
+            <CategoryCard
+                itemData={itemData}
+                onSelect={() => {
+                    props.navigation.navigate("Category Meals", {
+                        categoryId: itemData.item.id,
+                        categoryName: itemData.item.title,
                     });
                 }}
-            >
-                <View>
-                    <Text
-                        style={{
-                            fontFamily: "architects-daughter",
-                            fontSize: 18,
-                        }}
-                    >
-                        {itemData.item.title}
-                    </Text>
-                </View>
-            </TouchableOpacity>
+            ></CategoryCard>
         );
     };
 
@@ -60,10 +45,5 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-    },
-    categoryCard: {
-        flex: 1,
-        margin: 15,
-        height: 100,
     },
 });
