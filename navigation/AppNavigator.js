@@ -2,20 +2,21 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import MealCategoriesScreen from "../screens/MealCategoriesScreen";
 import CategoryScreen from "../screens/CategoryScreen";
 import MealDetailsScreen from "../screens/MealDetailsScreen";
 import FavouriteMealsScreen from "../screens/FavouriteMealsScreen";
+import FilterScreen from "../screens/FilterScreen";
 import { colors } from "../constants/colors";
-import { Platform, Image } from "react-native";
+import { Platform } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
+const Drawer = createDrawerNavigator();
 // logo component to add to screen header
 // function LogoTitle() {
 //     return (
@@ -43,6 +44,19 @@ let StackNavigator = () => (
         <Stack.Screen
             name="Meal Categories"
             component={MealCategoriesScreen}
+            options={({ navigation }) => ({
+                headerLeft: () => (
+                    <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                        <Item
+                            title="menu"
+                            iconName="menu"
+                            onPress={() => {
+                                navigation.toggleDrawer();
+                            }}
+                        ></Item>
+                    </HeaderButtons>
+                ),
+            })}
         ></Stack.Screen>
         <Stack.Screen
             name="Category Meals"
@@ -123,57 +137,95 @@ let FavoriteStackNavigator = () => {
     );
 };
 
+const TabNavigator = () => {
+    return (
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarActiveTintColor: colors.primaryColor,
+                tabBarLabelStyle: {
+                    fontFamily: "open-sans-bold",
+                    marginBottom: 3,
+                    fontSize: 12,
+                },
+            }}
+        >
+            <Tab.Screen
+                name="Meals"
+                component={StackNavigator}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialIcons
+                            name="restaurant"
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            ></Tab.Screen>
+            <Tab.Screen
+                name="Favorites"
+                component={FavoriteStackNavigator}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialIcons
+                            name="favorite"
+                            size={size}
+                            color={color}
+                        ></MaterialIcons>
+                    ),
+                    headerStyle: {
+                        backgroundColor: colors.primaryColor,
+                    },
+                    headerTintColor:
+                        Platform.OS === "ios" ? colors.primaryColor : "#fff",
+                    headerTitleStyle: {
+                        fontFamily: "pacifico",
+                    },
+                }}
+            ></Tab.Screen>
+        </Tab.Navigator>
+    );
+};
+
 const AppNavigator = () => {
     return (
         <NavigationContainer>
-            <Tab.Navigator
+            <Drawer.Navigator
                 screenOptions={{
+                    // headerShown: false,
+                    headerStyle: {
+                        backgroundColor:
+                            Platform.OS === "android"
+                                ? colors.primaryColor
+                                : "#FFF",
+                    },
+                    headerTintColor:
+                        Platform.OS === "android"
+                            ? "#FFF"
+                            : colors.primaryColor,
+                    headerTitleStyle: {
+                        fontFamily: "pacifico",
+                    },
                     headerShown: false,
-                    tabBarActiveTintColor: colors.primaryColor,
-                    tabBarLabelStyle: {
-                        fontFamily: "open-sans-regular",
-                        marginBottom: 3,
-                        fontSize: 12,
+                    drawerActiveTintColor: colors.primaryColor,
+                    drawerLabelStyle: {
+                        fontFamily: "open-sans-bold",
                     },
                 }}
             >
-                <Tab.Screen
-                    name="Meals"
-                    component={StackNavigator}
+                <Drawer.Screen
+                    name="Home"
+                    component={TabNavigator}
+                ></Drawer.Screen>
+                <Drawer.Screen
+                    name="Filters"
+                    component={FilterScreen}
                     options={{
-                        tabBarIcon: ({ color, size }) => (
-                            <MaterialIcons
-                                name="restaurant"
-                                size={size}
-                                color={color}
-                            />
-                        ),
+                        headerShown: true,
                     }}
-                ></Tab.Screen>
-                <Tab.Screen
-                    name="Favorites"
-                    component={FavoriteStackNavigator}
-                    options={{
-                        tabBarIcon: ({ color, size }) => (
-                            <MaterialIcons
-                                name="favorite"
-                                size={size}
-                                color={color}
-                            ></MaterialIcons>
-                        ),
-                        headerStyle: {
-                            backgroundColor: colors.primaryColor,
-                        },
-                        headerTintColor:
-                            Platform.OS === "ios"
-                                ? colors.primaryColor
-                                : "#fff",
-                        headerTitleStyle: {
-                            fontFamily: "pacifico",
-                        },
-                    }}
-                ></Tab.Screen>
-            </Tab.Navigator>
+                ></Drawer.Screen>
+            </Drawer.Navigator>
         </NavigationContainer>
     );
 };
