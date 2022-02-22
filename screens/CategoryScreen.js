@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import { MEALS } from "../data/dummy-data";
-import MealCard from "../components/MealCard";
+import MealsList from "../components/MealsList";
 
 const CategoryScreen = (props) => {
     // let title = props.navigation.getParam("categoryTitle");
@@ -13,30 +13,10 @@ const CategoryScreen = (props) => {
 
     return (
         <View style={styles.screen}>
-            <FlatList
-                style={{ width: "100%", padding: 10 }}
-                data={mealsDisplayList}
-                renderItem={(itemData) => {
-                    return (
-                        <MealCard
-                            title={itemData.item.title}
-                            duration={itemData.item.duration}
-                            affordability={itemData.item.affordability}
-                            complexity={itemData.item.complexity}
-                            imageUrl={itemData.item.imageUrl}
-                            onPress={() => {
-                                props.navigation.navigate({
-                                    name: "Meal Details",
-                                    params: {
-                                        mealId: itemData.item.id,
-                                        mealTitle: itemData.item.title,
-                                    },
-                                });
-                            }}
-                        ></MealCard>
-                    );
-                }}
-            ></FlatList>
+            <MealsList
+                navigation={props.navigation}
+                mealsDisplayList={mealsDisplayList}
+            ></MealsList>
         </View>
     );
 };

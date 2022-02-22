@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MealCategoriesScreen from "../screens/MealCategoriesScreen";
 import CategoryScreen from "../screens/CategoryScreen";
-import MealDetialsScreen from "../screens/MealDetailsScreen";
+import MealDetailsScreen from "../screens/MealDetailsScreen";
 import FavouriteMealsScreen from "../screens/FavouriteMealsScreen";
 import { colors } from "../constants/colors";
 import { Platform, Image } from "react-native";
@@ -53,7 +53,7 @@ let StackNavigator = () => (
         ></Stack.Screen>
         <Stack.Screen
             name="Meal Details"
-            component={MealDetialsScreen}
+            component={MealDetailsScreen}
             // you could also add icon as header
             // options={{
             //     headerTitle: (props) => (
@@ -77,6 +77,51 @@ let StackNavigator = () => (
         ></Stack.Screen>
     </Stack.Navigator>
 );
+
+let FavoriteStackNavigator = () => {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor:
+                        Platform.OS === "android"
+                            ? colors.primaryColor
+                            : "#FFF",
+                },
+                headerTintColor:
+                    Platform.OS === "android" ? "#FFF" : colors.primaryColor,
+                headerTitleStyle: {
+                    fontFamily: "pacifico",
+                },
+            }}
+        >
+            <Stack.Screen
+                name="Favorite"
+                component={FavouriteMealsScreen}
+            ></Stack.Screen>
+            <Stack.Screen
+                name="Meal Details"
+                component={MealDetailsScreen}
+                options={({ route }) => ({
+                    title: route.params.mealTitle,
+                    headerRight: () => (
+                        <HeaderButtons
+                            HeaderButtonComponent={CustomHeaderButton}
+                        >
+                            <Item
+                                title="fav"
+                                iconName="favorite"
+                                onPress={() => {
+                                    console.log("Favorite got clicked");
+                                }}
+                            ></Item>
+                        </HeaderButtons>
+                    ),
+                })}
+            ></Stack.Screen>
+        </Stack.Navigator>
+    );
+};
 
 const AppNavigator = () => {
     return (
@@ -107,7 +152,7 @@ const AppNavigator = () => {
                 ></Tab.Screen>
                 <Tab.Screen
                     name="Favorites"
-                    component={FavouriteMealsScreen}
+                    component={FavoriteStackNavigator}
                     options={{
                         tabBarIcon: ({ color, size }) => (
                             <MaterialIcons
@@ -116,7 +161,6 @@ const AppNavigator = () => {
                                 color={color}
                             ></MaterialIcons>
                         ),
-                        headerShown: true,
                         headerStyle: {
                             backgroundColor: colors.primaryColor,
                         },
