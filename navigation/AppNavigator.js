@@ -137,6 +137,46 @@ let FavoriteStackNavigator = () => {
     );
 };
 
+let FilterStackNavigator = () => {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor:
+                        Platform.OS === "android"
+                            ? colors.primaryColor
+                            : "#FFF",
+                },
+                headerTintColor:
+                    Platform.OS === "android" ? "#FFF" : colors.primaryColor,
+                headerTitleStyle: {
+                    fontFamily: "pacifico",
+                },
+            }}
+        >
+            <Stack.Screen
+                name="Filters"
+                component={FilterScreen}
+                options={({ navigation }) => ({
+                    headerLeft: () => (
+                        <HeaderButtons
+                            HeaderButtonComponent={CustomHeaderButton}
+                        >
+                            <Item
+                                title="menu"
+                                iconName="menu"
+                                onPress={() => {
+                                    navigation.toggleDrawer();
+                                }}
+                            ></Item>
+                        </HeaderButtons>
+                    ),
+                })}
+            ></Stack.Screen>
+        </Stack.Navigator>
+    );
+};
+
 const TabNavigator = () => {
     return (
         <Tab.Navigator
@@ -220,10 +260,7 @@ const AppNavigator = () => {
                 ></Drawer.Screen>
                 <Drawer.Screen
                     name="Filters"
-                    component={FilterScreen}
-                    options={{
-                        headerShown: true,
-                    }}
+                    component={FilterStackNavigator}
                 ></Drawer.Screen>
             </Drawer.Navigator>
         </NavigationContainer>
