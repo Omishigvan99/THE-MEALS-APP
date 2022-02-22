@@ -155,9 +155,9 @@ let FilterStackNavigator = () => {
             }}
         >
             <Stack.Screen
-                name="Filters"
+                name="Filter"
                 component={FilterScreen}
-                options={({ navigation }) => ({
+                options={({ navigation, route }) => ({
                     headerLeft: () => (
                         <HeaderButtons
                             HeaderButtonComponent={CustomHeaderButton}
