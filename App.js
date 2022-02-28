@@ -5,8 +5,16 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import AppNavigator from "./navigation/AppNavigator";
 import { enableScreens } from "react-native-screens";
+import { createStore, combineReducers } from "redux";
+import mealsReducer from "./store/reducer";
+import { Provider } from "react-redux";
 
 enableScreens(); //for better native performance
+
+let rootReducer = combineReducers({
+    meals: mealsReducer,
+});
+let store = createStore(rootReducer);
 
 export default function App() {
     let [loading] = useFonts({
@@ -20,7 +28,11 @@ export default function App() {
     if (!loading) {
         return <AppLoading></AppLoading>;
     }
-    return <AppNavigator></AppNavigator>;
+    return (
+        <Provider store={store}>
+            <AppNavigator></AppNavigator>
+        </Provider>
+    );
 }
 
 const styles = StyleSheet.create({

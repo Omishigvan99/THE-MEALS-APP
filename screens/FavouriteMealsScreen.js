@@ -1,12 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import MealsList from "../components/MealsList";
-import { MEALS } from "../data/dummy-data";
+import { useSelector } from "react-redux";
+import FallbackEmptyUI from "../components/FallbackEmptyUI";
 
 const FavouriteMealsScreen = (props) => {
-    let mealsDisplayList = MEALS.filter((item) => {
-        return item.id === "m1" || item.id === "m2";
-    });
+    let availableMeals = useSelector((state) => state.meals.favoriteMeals);
+    let mealsDisplayList = availableMeals;
+
+    if (mealsDisplayList.length === 0) {
+        return <FallbackEmptyUI></FallbackEmptyUI>;
+    }
 
     return (
         <View style={styles.screen}>

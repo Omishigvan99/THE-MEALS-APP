@@ -76,17 +76,6 @@ let StackNavigator = () => (
             // }}
             options={({ route }) => ({
                 title: route.params.mealTitle,
-                headerRight: () => (
-                    <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-                        <Item
-                            title="fav"
-                            iconName="favorite"
-                            onPress={() => {
-                                console.log("Favorite got clicked");
-                            }}
-                        ></Item>
-                    </HeaderButtons>
-                ),
             })}
         ></Stack.Screen>
     </Stack.Navigator>
@@ -118,19 +107,6 @@ let FavoriteStackNavigator = () => {
                 component={MealDetailsScreen}
                 options={({ route }) => ({
                     title: route.params.mealTitle,
-                    headerRight: () => (
-                        <HeaderButtons
-                            HeaderButtonComponent={CustomHeaderButton}
-                        >
-                            <Item
-                                title="fav"
-                                iconName="favorite"
-                                onPress={() => {
-                                    console.log("Favorite got clicked");
-                                }}
-                            ></Item>
-                        </HeaderButtons>
-                    ),
                 })}
             ></Stack.Screen>
         </Stack.Navigator>

@@ -1,12 +1,37 @@
 import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
-import React from "react";
-import { MEALS } from "../data/dummy-data";
+import React, { useEffect, useState } from "react";
 import { colors } from "../constants/colors";
+import { useDispatch, useSelector } from "react-redux";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import CustomHeaderButton from "../components/CustomHeaderButton";
+import { toggleFavorite } from "../store/actions";
 
 const MealDetailsScreen = (props) => {
     let mealId = props.route.params.mealId;
+    let [isFavorite, setIsFavorite] = useState(props.route.params.isFavorite);
 
-    let mealDetails = MEALS.find((item) => {
+    let availableMeals = useSelector((state) => state.meals.meals);
+
+    let dispatch = useDispatch();
+
+    useEffect(() => {
+        props.navigation.setOptions({
+            headerRight: () => (
+                <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                    <Item
+                        title="fav"
+                        iconName={isFavorite ? "favorite" : "favorite-outline"}
+                        onPress={() => {
+                            dispatch(toggleFavorite(mealId));
+                            setIsFavorite((prev) => !prev);
+                        }}
+                    ></Item>
+                </HeaderButtons>
+            ),
+        });
+    }, [isFavorite]);
+
+    let mealDetails = availableMeals.find((item) => {
         return item.id === mealId;
     });
 

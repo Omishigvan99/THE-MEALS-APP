@@ -1,15 +1,22 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
-import { MEALS } from "../data/dummy-data";
 import MealsList from "../components/MealsList";
+import { useSelector } from "react-redux";
+import FallbackEmptyUI from "../components/FallbackEmptyUI";
 
 const CategoryScreen = (props) => {
     // let title = props.navigation.getParam("categoryTitle");
     let id = props.route.params.categoryId;
 
-    let mealsDisplayList = MEALS.filter((item) => {
+    let availaleMeals = useSelector((state) => state.meals.filteredMeals);
+
+    let mealsDisplayList = availaleMeals.filter((item) => {
         return item.categoriesId.indexOf(id) >= 0;
     });
+
+    if (mealsDisplayList.length === 0) {
+        return <FallbackEmptyUI></FallbackEmptyUI>;
+    }
 
     return (
         <View style={styles.screen}>

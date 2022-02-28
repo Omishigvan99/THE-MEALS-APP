@@ -3,6 +3,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import { colors } from "../constants/colors";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
+import { useDispatch } from "react-redux";
+import { setFilters } from "../store/actions";
 
 const Filter = ({ label, onChange, value }) => {
     return (
@@ -25,7 +27,7 @@ const FilterScreen = (props) => {
     const [isLactoseFree, setIsLactoseFree] = useState(false);
     const [isVegan, setIsVegan] = useState(false);
     const [isVegeterian, setIsVegeterian] = useState(false);
-
+    let dispatch = useDispatch();
     let saveFilters = useCallback(() => {
         const selectedFilters = {
             glutenFree: isGlutenFree,
@@ -33,8 +35,8 @@ const FilterScreen = (props) => {
             vegan: isVegan,
             vegeterian: isVegeterian,
         };
-
         console.log(JSON.stringify(selectedFilters));
+        dispatch(setFilters(selectedFilters));
     }, [isGlutenFree, isLactoseFree, isVegan, isVegeterian]);
 
     useEffect(() => {
